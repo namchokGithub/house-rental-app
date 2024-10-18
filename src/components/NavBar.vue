@@ -23,6 +23,15 @@
 <script>
 export default {
   name: "NavBar",
+  mounted() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      this.isDarkMode = true;
+    } else {
+      this.isDarkMode = false;
+    }
+    this.applyTheme();
+  },
   data() {
     return {
       isDarkMode: false,
@@ -30,14 +39,25 @@ export default {
   },
   computed: {
     themeIcon() {
-      return this.isDarkMode ? "fas fa-sun" : "fas fa-moon";
+      return this.isDarkMode ? "fas fa-moon" : "fas fa-sun";
     },
   },
   methods: {
     toggleTheme() {
       this.isDarkMode = !this.isDarkMode;
+      const theme = this.isDarkMode ? "dark" : "light";
       if (this.isDarkMode) {
-        document.documentElement.setAttribute("data-theme", "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+
+      localStorage.setItem("theme", theme);
+    },
+    applyTheme() {
+      const theme = this.isDarkMode ? "dark" : "light";
+      if (this.isDarkMode) {
+        document.documentElement.setAttribute("data-theme", theme);
       } else {
         document.documentElement.removeAttribute("data-theme");
       }
